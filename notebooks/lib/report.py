@@ -51,8 +51,8 @@ for label, summary, report in [('PUMA', p['main'], p['report']), ('TIGER', t['ma
         if cls in ['accuracy', 'weighted avg']:
             continue
         name = 'Macro average' if cls == 'macro avg' else cls.capitalize()
-        rows.append([label, esc(name)] + [f'{values[k]:.2f}' for k in ['precision', 'recall', 'f1-score']])
-    rows.append([label, r'Fold macro-F1', '--', '--', f"{summary['fold_mean']:.2f} $\\pm$ {summary['fold_sd']:.2f}"])
+        rows.append([label, esc(name), f"{values['precision']:.2f}", f"{values['recall']:.2f}", f"{values['f1-score']:.{3 if cls == 'macro avg' else 2}f}"])
+    rows.append([label, r'Fold macro-F1', '--', '--', f"{summary['fold_mean']:.3f} $\\pm$ {summary['fold_sd']:.3f}"])
 table('table_classification.tex', 'llccc', ['Dataset', 'Class', 'Precision', 'Recall', 'F1'], rows)
 
 labels = ['Basic morphology/intensity', 'First-order only', 'Shape 2D only', 'Texture only',

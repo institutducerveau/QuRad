@@ -98,7 +98,7 @@ The code the notebooks import is in `notebooks/lib/`; everything they write goes
 `notebooks/results/` (tables, figures, per-object predictions). `QURAD_DATA` and
 `QURAD_RESULTS` override the input and output folders. After the notebooks have run,
 `python notebooks/lib/report.py` formats Tables 3, 4 and S2 to S6 of the article from their
-outputs. The repository state used for the article is tagged `paper-2026`.
+outputs.
 
 ## Data
 
@@ -107,12 +107,10 @@ outputs. The repository state used for the article is tagged `paper-2026`.
   B. S. Manjunath, "Evaluation and benchmark for biological image segmentation," *IEEE ICIP*
   2008, pp. 1816–1819.
 - PUMA melanoma tiles: [PUMA challenge](https://puma.grand-challenge.org/) (CC0). The feature
-  tables are included. The images are not tracked in git because of their size; the
-  reproducibility archive of the article contains the 20 tiles and their annotations.
+  tables are included; the images are not.
 - TIGER breast-cancer slides and region annotations: [TIGER challenge](https://tiger.grand-challenge.org/)
   (CC BY-NC 4.0), public on AWS Open Data (`s3://tiger-training/`). The feature tables derived
-  from them are included under the same licence, and the reproducibility archive of the article also contains
-  the region annotations. The slides are not included.
+  from them are included under the same licence. The slides are not included.
 
 ## Citation
 
