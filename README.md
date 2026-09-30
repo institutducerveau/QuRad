@@ -115,7 +115,7 @@ outputs.
 ## Citation
 
 A manuscript describing QuRad and its validation is under review. Until it appears, please cite
-this repository together with [QuPath](https://qupath.github.io) and [PyRadiomics](https://pyradiomics.readthedocs.io).
+the Zenodo archive, DOI [10.5281/zenodo.23062834](https://doi.org/10.5281/zenodo.23062834), together with [QuPath](https://qupath.github.io) and [PyRadiomics](https://pyradiomics.readthedocs.io).
 
 ## License
 
