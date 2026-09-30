@@ -1,4 +1,4 @@
-# Welcome to QuRad
+# QuRad
 
 ```
  ██████╗ ██╗   ██╗██████╗  █████╗ ██████╗ 
@@ -18,11 +18,11 @@ QuRad is an open-source [QuPath](https://qupath.github.io/) tool that extracts u
 - an **installable QuPath extension** (a `.jar` with a menu command and settings dialog), and
 - a **self-contained Groovy script** that you paste into QuPath's Script Editor.
 
-QuRad operates on **2D whole slide images (WSI)** in 8-bit RGB, extracting features from a grayscale image derived from RGB luminance. It has been validated on H&E histopathology images and is built for **QuPath 0.6 and 0.7**.
+QuRad works on **2D whole slide images (WSI)** in 8-bit RGB and computes the features on a grayscale image derived from RGB luminance. It has been validated on H&E histopathology images and runs on **QuPath 0.6 and 0.7**.
 
-Extracted features can be used to **classify cells**, **characterize tissue regions**, **assess tissue quality**, and feed **downstream machine learning workflows**. By keeping the entire process within QuPath, QuRad streamlines the analytical workflow and preserves interactivity.
+The features can be used to classify cells, characterize tissue regions, assess tissue quality or train machine-learning models. The extraction runs inside QuPath, so the values can be explored there directly, for example in measurement maps.
 
-This documentation covers **QuRad 0.4** (script `QuPath_Radiomics_v3.groovy`, extension `qupath-extension-qurad-0.4.0`). Source code and releases are available on [GitHub](https://github.com/icm-dac/QuRad).
+This documentation covers **QuRad 0.4** (script `QuPath_Radiomics_v3.groovy`, extension `qupath-extension-qurad-0.4.0`). Source code and releases are available on [GitHub](https://github.com/institutducerveau/QuRad).
 
 !!! warning "Research use"
     QuRad is a research tool provided under the MIT license. It is intended for research purposes and has not been validated for clinical use.
@@ -67,7 +67,7 @@ If you use QuRad in your research, please cite:
 
 QuRad was developed at Sorbonne Université, Institut du Cerveau — ICM (CNRS, Inria, Inserm, AP-HP, Hôpital de la Pitié-Salpêtrière, Paris), within the DAC team.
 
-This project is co-funded by the European Union's Horizon Europe research and innovation programme Cofund SOUND.AI under the Marie Skłodowska-Curie Grant Agreement No 101081674. It is also supported by Agence Nationale de la Recherche (ANR) JCJC LOChrom (ANR-23-CE17-0027-01), by the BRAINTWIN project funded under France 2030 through the PEPR Santé Numérique programme (ref. 2025-PEPR-121554), and by the MultiPOLA project funded by the Institut national du cancer (INCa; OSIRIS25).
+This project is co-funded by the European Union's Horizon Europe research and innovation programme Cofund SOUND.AI under the Marie Skłodowska-Curie Grant Agreement No 101081674. It is also supported by Agence Nationale de la Recherche (ANR) JCJC LOCimm (ANR-23-CE17-0027-01), by the BRAINTWIN project funded under France 2030 through the PEPR Santé Numérique programme (ref. 2025-PEPR-121554), and by the MultiPOLA project funded by the Institut national du cancer (INCa, OSIRIS25).
 
 ---
 

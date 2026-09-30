@@ -1,18 +1,18 @@
 # Example Application
 
-This guide walks through a complete radiomics workflow: from an image with detections to feature extraction, visualization, and further analysis in QuPath.
+This page follows one image from cell detection to feature extraction, visualization in QuPath and export.
 
 ## Workflow Overview
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  Prepare image  │ -> │  Run QuRad      │ -> │  Visualize      │ -> │  Export &        │
-│  with objects   │    │  (menu/script)  │    │  in QuPath      │    │  analyze         │
+│  Prepare image  │ -> │  Run QuRad      │ -> │  Visualize      │ -> │  Export &       │
+│  with objects   │    │  (menu/script)  │    │  in QuPath      │    │  analyze        │
 └─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 1. **Prepare**: Load an image with cell detections or annotations in QuPath
-2. **Extract**: Run QuRad — from the Extensions menu or the script editor — to compute 103 features per object (119 with the optional legacy shape class)
+2. **Extract**: Run QuRad from the Extensions menu or the script editor to compute 103 features per object (119 with the optional legacy shape class)
 3. **Visualize**: Use measurement maps to explore spatial patterns
 4. **Export**: Save the CSV for further analysis (classification, clustering, etc.)
 
@@ -45,7 +45,7 @@ If you have annotations from external tools:
 
 1. Go to **File → Import objects**
 2. Select your GeoJSON file
-3. Annotations appear as detection objects
+3. The objects appear in the image as annotations or detections, as defined in the file
 
 ## Step 2: Run QuRad
 
@@ -57,16 +57,11 @@ QuRad can be run from the **extension menu** (recommended) or the **script edito
 2. In the settings dialog, set the bin width, choose which objects to process (detections, annotations, or selected only), select the feature classes to compute, and choose the output (add to the measurement table and/or export a CSV).
 3. Click **OK**. A notification reports progress and confirms when extraction is complete.
 
-<!-- Screenshot placeholder — add docs/assets/qurad_dialog.png, then uncomment:
-![QuRad extraction dialog](assets/qurad_dialog.png)
-*The QuRad settings dialog opened from Extensions → QuRad → Extract radiomics features…*
--->
-
 ### Option B: Script editor
 
 1. Open **Automate → Script editor**
 2. Load `QuPath_Radiomics_v3.groovy`
-3. Configure settings if needed (see [Getting Started — Configuration](getting-started.md#configuration)):
+3. Configure settings if needed (see [Getting Started: Configuration](getting-started.md#configuration)):
 
 ```groovy
 def processDetections = true
@@ -78,8 +73,10 @@ def addToMeasurements = true
 
 ```
 ================================================================================
-QuPath Radiomics Extraction - v3
+QuPath Radiomics Extraction - QuRad 0.4.0
 ================================================================================
+  ✓ firstorder
+  ...
 Processing 5000 objects
 
 Processed 5000/5000 (892.3 objects/sec)
@@ -88,7 +85,9 @@ Processed 5000/5000 (892.3 objects/sec)
 Complete
 ================================================================================
 Processed: 5000 objects
-Features per object: 103
+Skipped: 0 objects
+...
+Total radiomics features: 103
 ```
 
 ## Step 3: Visualize in QuPath
@@ -105,11 +104,7 @@ Color cells by any radiomics feature:
 
 *Measurement map visualization: cells colored by `firstorder_Energy`. Dark violet indicates cells with lower energy values, yellow indicates cells with higher energy values.*
 
-This helps identify spatial patterns in your data, such as:
-
-- Regions with high texture complexity
-- Clusters of cells with similar morphology
-- Gradients across tissue regions
+Measurement maps show spatial patterns, for example regions of high texture complexity, clusters of cells with similar morphology or gradients across a tissue region.
 
 ### Histogram View
 
@@ -132,7 +127,8 @@ The CSV file is automatically saved to your project's `radiomics` folder:
 ```
 project/
 └── radiomics/
-    └── image_radiomics_20250126_143052.csv
+    ├── image_radiomics_20260904_143052.csv
+    └── image_radiomics_20260904_143052_settings.json
 ```
 
 ### Export Measurements Table
@@ -145,12 +141,4 @@ You can also export via QuPath's built-in export:
 
 ## What Next?
 
-The radiomic features extracted by QuRad provide quantitative descriptors that can be used for a variety of downstream analyses:
-
-- **Cell classification**: distinguish cell populations based on morphological and texture differences (e.g., tumor cells vs. lymphocytes)
-- **Tissue region characterization**: describe the composition and architecture of tissue compartments (e.g., invasive tumor vs. stroma vs. healthy glands)
-- **Quality assessment**: evaluate tissue quality or staining consistency across slides
-- **Exploratory analysis**: use dimensionality reduction (UMAP, PCA) to identify clusters and spatial patterns
-- **Machine learning**: feed features into classifiers (Random Forest, SVM, etc.) for automated phenotyping or outcome prediction
-
-For more details on these applications, see the [Feature Reference](features.md).
+The features can be used to classify cells (for example tumor cells versus lymphocytes), to characterize tissue compartments (for example invasive tumor, stroma and healthy glands), to compare tissue quality or staining across slides, or as input to UMAP, clustering and machine-learning models. The two application notebooks in the [GitHub repository](https://github.com/institutducerveau/QuRad) reproduce the cell and tissue classifications of the article, and the [Feature Reference](features.md) defines every feature.

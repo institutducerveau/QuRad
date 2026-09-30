@@ -1,6 +1,6 @@
 # Feature Reference
 
-QuRad implements **119 radiomic features** in eight classes. **103 features are enabled by default**; they are all
+QuRad implements **119 radiomic features** in eight classes. **103 features are enabled by default**. They are all
 two-dimensional quantities with a direct [PyRadiomics](https://pyradiomics.readthedocs.io/en/latest/features.html)
 equivalent. The remaining **16 features of the `shape` class are optional** (off by default): they are 2D quantities
 reported under PyRadiomics' 3D shape names for backwards compatibility and are *not* equivalent to PyRadiomics' 3D shape
@@ -33,7 +33,7 @@ These conventions are fixed in the code and recorded in the `*_settings.json` fi
 |--------|------------------|------------------------------------|
 | Input | 8-bit RGB brightfield image, read at full resolution (downsample 1). Non-RGB images are refused. | – |
 | Grayscale | `gray = floor((299 R + 587 G + 114 B) / 1000)` (integer arithmetic, values 0–255) | same conversion applied before extraction |
-| Pixel mask | a pixel belongs to the ROI if its **centre** lies inside the ROI polygon (Java2D fill, pure geometry, no anti-aliasing); pixels outside the image are ignored | label mask |
+| Pixel mask | a pixel belongs to the ROI if its **centre** lies inside the ROI polygon (Java2D fill of the exact polygon geometry, without stroke widening or anti-aliasing); pixels outside the image are ignored | label mask |
 | Discretisation | fixed bin width (default 25); bin edges aligned to multiples of the bin width from 0; bin index = floor((v − lowBound)/binWidth) + 1 | `binWidth=25`, `normalize=False`, `voxelArrayShift=0` |
 | GLCM | symmetric matrix, distance 1 (configurable), four directions (0°, 45°, 90°, 135°), matrices **summed over directions** before features are computed | `force2D=True`, `distances=[1]`, `symmetricalGLCM=True`, `weightingNorm='no_weighting'` |
 | GLRLM | runs along the same four directions, matrices summed | `weightingNorm='no_weighting'` |
@@ -47,13 +47,13 @@ These conventions are fixed in the code and recorded in the `*_settings.json` fi
     breast-cancer benchmark tile the two conventions differ by a median relative error of about 0.4 % (GLCM) and 2.6 %
     (GLRLM), with differences of up to 46 % for `glrlm_LongRunEmphasis` in individual cells.
 
-CSV headers include the union of feature names over all processed objects. If a feature is undefined for one object, its cell is blank; that object does not suppress valid columns for later objects.
+CSV headers include the union of feature names over all processed objects. If a feature is undefined for one object, its cell is left blank, and the column is still written for all other objects.
 
 ### Edge cases and undefined values
 
 | Situation | QuRad behaviour |
 |-----------|-----------------|
-| ROI polygon contains no pixel centre (e.g. degenerate sliver) | object skipped and counted as skipped; no row is written |
+| ROI polygon contains no pixel centre (e.g. degenerate sliver) | object skipped, no row written, and the number skipped is reported |
 | ROI extends beyond the image | pixel-based features use the pixels inside the image; polygon-based shape features (`MeshSurface`, `Perimeter`, `MaximumDiameter`, sphericity) describe the polygon as drawn; `NumPixels` reports the pixels actually used |
 | Flat region (single gray level) | `firstorder_Entropy = 0`, `Uniformity = 1`, `Skewness = Kurtosis = 0`, `glcm_Correlation = 1`, `glcm_Imc1 = Imc2 = 0`, `ngtdm_Coarseness = 10^6`, `ngtdm_Contrast = Busyness = Strength = 0` (all as in PyRadiomics) |
 | Zero denominator elsewhere (perimeter 0, no run/zone, …) | feature is 0 |
@@ -103,7 +103,7 @@ principal components of the pixel-centre coordinates (population covariance), as
 !!! info "Polygon versus mesh"
     QuRad measures the ROI polygon as drawn in QuPath. PyRadiomics reconstructs a marching-squares mesh from the
     rasterised mask, which cuts the corners of a pixel outline. For polygons that were themselves traced from a raster
-    (e.g. label masks converted with marching squares, as in the validation benchmark) both agree exactly; for
+    (e.g. label masks converted with marching squares, as in the validation benchmark) both agree exactly. For
     smooth or hand-drawn polygons the mesh perimeter is typically a few per cent longer and the mesh area slightly
     smaller (Supplementary Table S2 of the article quantifies this on synthetic shapes).
 
@@ -201,8 +201,8 @@ Dependence matrix `P(i,j)`: gray level i, dependence j = 1 + number of 8-neighbo
 !!! warning "Not recommended for 2D histology"
     These features exist only so that pipelines expecting PyRadiomics' 3D `shape_*` column names keep working. They
     are computed from the same 2D polygon and mask as the `shape2D` class, and they are **not** numerically equivalent
-    to PyRadiomics' 3D shape features, which treat a single slice as a one-voxel-thick volume. Enable them only if you
-    know why you need them; use `shape2D_*` otherwise.
+    to PyRadiomics' 3D shape features, which treat a single slice as a one-voxel-thick volume. Enable them only if a
+    pipeline needs these column names, and use `shape2D_*` otherwise.
 
 | Feature | How QuRad computes it | Equivalent 2D feature |
 |---------|-----------------------|-----------------------|

@@ -1,10 +1,10 @@
 # Getting Started
 
-This guide walks you through setting up and running QuRad, from preparing your data to extracting radiomics features.
+This page explains how to prepare a QuPath project, install or open QuRad, and extract the features.
 
 ## Requirements
 
-- **QuPath** — version 0.6 or 0.7
+- **QuPath** 0.6 or 0.7
 - A **QuPath project** with at least one image
 - **Detections or annotations** on your image (cells, tissue regions, or imported objects)
 
@@ -43,13 +43,13 @@ To import annotations from external tools (e.g., GeoJSON files):
 !!! tip "Supported formats"
     QuPath can import annotations from GeoJSON and other formats. GeoJSON is recommended for interoperability with Python workflows.
 
-## Option A — Install the extension
+## Option A: Install the extension
 
 The extension wraps the same feature code behind a menu command and settings dialog. Recommended for repeated use.
 
 ### 1. Get the jar
 
-Download `qupath-extension-qurad-<version>.jar` from the [Releases](https://github.com/icm-dac/QuRad/releases) page, or build it yourself:
+Download `qupath-extension-qurad-<version>.jar` from the [Releases](https://github.com/institutducerveau/QuRad/releases) page, or build it yourself:
 
 ```bash
 cd extension
@@ -75,9 +75,9 @@ The dialog mirrors the [configuration](#configuration) options described below. 
     QuRad works on **8-bit RGB brightfield images** (the standard for H&E whole-slide images). Fluorescence,
     multichannel or 16-bit images are refused with an explicit message.
 
-## Option B — Run the script
+## Option B: Run the script
 
-Download the script [`QuPath_Radiomics_v3.groovy`](https://github.com/icm-dac/QuRad/blob/main/src/QuPath_Radiomics_v3.groovy) from the GitHub repository. Always use the latest version available. Save it to a location you can easily access.
+Download the script [`QuPath_Radiomics_v3.groovy`](https://github.com/institutducerveau/QuRad/blob/main/src/QuPath_Radiomics_v3.groovy) from the GitHub repository. Always use the latest version.
 
 There are two ways to use the script:
 
@@ -126,7 +126,7 @@ def settings = [
 |-----------|---------|-------------|
 | `binWidth` | `25` | Fixed bin width for intensity discretisation of the 0–255 gray scale (bins aligned to multiples of the bin width from 0, as in PyRadiomics). Smaller values capture finer intensity differences but are more sensitive to noise. |
 | `voxelArrayShift` | `0` | Constant added to all intensities before `Energy`, `TotalEnergy` and `RootMeanSquared` are computed. |
-| `force2D` | `true` | All features are two-dimensional; this flag is kept for PyRadiomics compatibility and cannot be changed. |
+| `force2D` | `true` | All features are two-dimensional. The flag is kept for PyRadiomics compatibility and cannot be changed. |
 | `distances` | `[1]` | Offset in **pixels** between co-occurring pixels for the GLCM. Only the first value is used. |
 | `angles` | `4` | Informational: GLCM and GLRLM always use the four in-plane directions and sum the matrices (PyRadiomics `weightingNorm='no_weighting'`). |
 
@@ -138,7 +138,7 @@ All other conventions (grayscale conversion, pixel-centre mask rule, edge-case h
     corresponds to a different physical distance on a 0.25 µm/px slide than on a 0.5 µm/px slide. QuRad records the
     pixel calibration of every image in the CSV (`PixelWidth_um`, `PixelHeight_um`) and in the settings file so that
     you can account for it. Compare images at a common physical resolution. Changing `distances` adjusts only
-    the GLCM sampling offset; it does not harmonize GLRLM, GLSZM, GLDM, NGTDM or pixel-based shape measurements.
+    the GLCM sampling offset. It does not harmonize GLRLM, GLSZM, GLDM, NGTDM or pixel-based shape measurements.
     Length and area features are reported in pixels and can be converted using the calibration columns.
 
 ### Feature selection
@@ -159,7 +159,7 @@ def enabledFeatures = [
 ```
 
 The default selection yields **103 features**, all of which are two-dimensional quantities with a direct PyRadiomics
-equivalent. The optional `shape` class reports 2D quantities under PyRadiomics' 3D shape names; it is disabled by
+equivalent. The optional `shape` class reports 2D quantities under PyRadiomics' 3D shape names. It is disabled by
 default because those names suggest measurements that do not exist for a single histology section (see the
 [Feature Reference](features.md#legacy-3d-named-shape-features-16-optional)).
 
@@ -186,7 +186,7 @@ def addToMeasurements = true   // Add features to QuPath's measurement table
 ```
 
 - **`exportCSV`**: saves all features to a timestamped CSV file in the `radiomics` folder of your project, together with a `_settings.json` file that records the software version, QuPath version, image name, pixel calibration, all parameters and conventions, and the enabled feature classes.
-- **`addToMeasurements`**: adds features to QuPath's measurement system, enabling measurement maps and the measurements table.
+- **`addToMeasurements`**: adds the features to each object's measurements, where they appear in the measurement table and in measurement maps.
 
 ## Output
 
@@ -202,7 +202,7 @@ your_project/
 ```
 
 The CSV contains one row per object and, with the default settings, **112 columns** (103 features + 9 metadata
-columns; 128 columns if the legacy `shape` class is enabled):
+columns, or 128 columns if the legacy `shape` class is enabled):
 
 | Column | Description |
 |--------|-------------|
@@ -227,7 +227,7 @@ reported in the log.
 
 !!! tip "Minimum object size"
     Texture matrices of very small objects are degenerate (a 1-pixel ROI has one gray level and no pixel pairs).
-    PyRadiomics refuses masks smaller than 2 pixels in any dimension; QuRad computes features for any non-empty ROI but
+    PyRadiomics refuses masks smaller than 2 pixels in any dimension. QuRad computes features for any non-empty ROI, but
     we recommend filtering objects with `NumPixels` below about 10 pixels downstream, and checking that nuclei are
     segmented at a resolution where they span at least a few dozen pixels.
 

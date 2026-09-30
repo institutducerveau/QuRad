@@ -12,20 +12,20 @@
 Radiomics feature extraction inside QuPath.
 
 QuRad computes 103 radiomic features for every cell detection or annotation region in an
-image and writes them to a CSV — no export to Python, no external tools. The features are
+image and writes them to a CSV, without any export to Python or other external tools. The features are
 the PyRadiomics definitions (first-order, 2D shape, GLCM, GLRLM, GLSZM, NGTDM, GLDM), and
 every one of them has been checked against PyRadiomics 3.0.1 on identical pixel masks.
 
-Documentation: https://icm-dac.github.io/QuRad/
+Documentation: https://institutducerveau.github.io/QuRad/
 
 ## Install
 
 QuRad works on QuPath 0.6 and 0.7 and comes in two forms that give identical results.
 
 **Extension.** Download `qupath-extension-qurad-<version>.jar` from
-[Releases](https://github.com/icm-dac/QuRad/releases), drag it onto the QuPath window and
+[Releases](https://github.com/institutducerveau/QuRad/releases), drag it onto the QuPath window and
 restart. You get a menu entry, **Extensions ▸ QuRad ▸ Extract radiomics features…**, with a
-settings dialog. To build it yourself: `cd extension && ./gradlew build` (JDK 21); the jar
+settings dialog. To build it yourself: `cd extension && ./gradlew build` (JDK 21). The jar
 lands in `extension/build/libs/`.
 
 **Script.** Open `src/QuPath_Radiomics_v3.groovy` in QuPath's script editor and run it. The
@@ -36,7 +36,7 @@ in a project (**Run ▸ Run for project…**), this is the easy way to process a
 
 Open an image that has cell detections (from QuPath's own cell detection, StarDist, Cellpose,
 or imported GeoJSON) or annotation regions, run QuRad, and choose what to process and which
-feature classes you want. Images must be 8-bit RGB brightfield; anything else is refused with
+feature classes you want. Images must be 8-bit RGB brightfield. Anything else is refused with
 a message.
 
 For every image QuRad writes two files into `<project>/radiomics/`:
@@ -53,7 +53,7 @@ also go straight into QuPath's measurement table for measurement maps and classi
 Defaults: bin width 25, GLCM distance 1 pixel, texture matrices summed over the four in-plane
 directions (PyRadiomics `weightingNorm='no_weighting'`). A 16-feature class of 2D quantities
 reported under PyRadiomics' 3D shape names is available for old pipelines but off by default.
-Details of every convention are in the [feature reference](https://icm-dac.github.io/QuRad/features/).
+Details of every convention are in the [feature reference](https://institutducerveau.github.io/QuRad/features/).
 
 Single-threaded, about 1,900 nuclei per second on a server CPU.
 
@@ -81,8 +81,8 @@ Only the first notebook needs PyRadiomics installed. The two application noteboo
 QuRad output exactly as QuPath writes it (`example_data/*/radiomics/`), so if you re-extract in
 QuPath and drop the new files there, they analyse yours.
 
-Notebook 1 compares QuRad with PyRadiomics on identical pixel masks; both sides are in
-`example_data/*/pyradiomics/` (headless QuRad run, exported masks, PyRadiomics output). To
+Notebook 1 compares QuRad with PyRadiomics on identical pixel masks. Both sides are in
+`example_data/*/pyradiomics/` (the QuRad command-line run, the exported masks and the PyRadiomics output). To
 regenerate them from the images:
 
 ```bash
@@ -91,10 +91,10 @@ python notebooks/lib/pyradiomics_extract.py --image <tif> --gray <dir>/gray.png 
 ```
 
 The timing benchmark (Table S3, Figure S3) is rerun with `notebooks/lib/run_benchmark.sh` on an
-idle machine and summarised with `python notebooks/lib/benchmark_report.py`; the raw timings,
+idle machine and summarised with `python notebooks/lib/benchmark_report.py`. The raw timings,
 including CPU model and JVM, are in `example_data/benchmark/`.
 
-The code the notebooks import is in `notebooks/lib/`; everything they write goes to
+The code the notebooks import is in `notebooks/lib/`, and everything they write goes to
 `notebooks/results/` (tables, figures, per-object predictions). `QURAD_DATA` and
 `QURAD_RESULTS` override the input and output folders. After the notebooks have run,
 `python notebooks/lib/report.py` formats Tables 3, 4 and S2 to S6 of the article from their
@@ -102,12 +102,12 @@ outputs.
 
 ## Data
 
-- `example_data/breast_cancer/` — one tissue-microarray tile from the UCSB Bio-Segmentation
+- `example_data/breast_cancer/`: one tissue-microarray tile from the UCSB Bio-Segmentation
   benchmark (CC BY 3.0). If you use it, cite: E. Drelie Gelasca, J. Byun, B. Obara and
   B. S. Manjunath, "Evaluation and benchmark for biological image segmentation," *IEEE ICIP*
   2008, pp. 1816–1819.
 - PUMA melanoma tiles: [PUMA challenge](https://puma.grand-challenge.org/) (CC0). The feature
-  tables are included; the images are not.
+  tables are included, but not the images.
 - TIGER breast-cancer slides and region annotations: [TIGER challenge](https://tiger.grand-challenge.org/)
   (CC BY-NC 4.0), public on AWS Open Data (`s3://tiger-training/`). The feature tables derived
   from them are included under the same licence. The slides are not included.
@@ -115,8 +115,7 @@ outputs.
 ## Citation
 
 A manuscript describing QuRad and its validation is under review. Until it appears, please cite
-the project archive, DOI [10.5281/zenodo.20628110](https://doi.org/10.5281/zenodo.20628110),
-together with [QuPath](https://qupath.github.io) and [PyRadiomics](https://pyradiomics.readthedocs.io).
+this repository together with [QuPath](https://qupath.github.io) and [PyRadiomics](https://pyradiomics.readthedocs.io).
 
 ## License
 
